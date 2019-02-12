@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Remote Teleprompter</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="https://unpkg.com/vue@2.5.21/dist/vue.js"></script>
+    <script type="text/javascript" src="./js/teleprompter.js" defer></script>
+    <script type="text/javascript" src="./js/script-control.js" defer></script>
+</head>
+<body>
+    <textarea></textarea>
+    <select class="script-control" id="script-control" v-model="fontFamily">
+        <optgroup v-for="fontType in Object.keys(fonts)" :label="fontType">
+            <option v-for="font in fonts[fontType]" :value="font">{{font}}</option>
+        </optgroup>
+    </select>
+
+</body>
+</html>
