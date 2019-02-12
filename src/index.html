@@ -5,15 +5,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <script type="text/javascript" src="https://unpkg.com/vue@2.5.21/dist/vue.js"></script>
     <script type="text/javascript" src="./js/teleprompter.js" defer></script>
-    <script type="text/javascript" src="./js/script-control.js" defer></script>
+    <script type="text/javascript" src="./js/script-control-font-family.js" defer></script>
+    <script type="text/javascript" src="./js/script-content.js" defer></script>
+    <script type="text/javascript" src="./js/scene.js" defer></script>
 </head>
 <body>
-    <textarea></textarea>
-    <select class="script-control" id="script-control" v-model="fontFamily">
-        <optgroup v-for="fontType in Object.keys(fonts)" :label="fontType">
-            <option v-for="font in fonts[fontType]" :value="font">{{font}}</option>
-        </optgroup>
-    </select>
+    <div class="scene" id="scene">
+        <script-content :font-family='sceneFontFamily'></script-content>
+        <script-font-family :font-family='sceneFontFamily' 
+                            @pass-font-family="changeFontFamily">
+        </script-font-family>
+        <!-- <global-script-font-family></global-script-font-family> -->
+    </div>
 
 </body>
 </html>
