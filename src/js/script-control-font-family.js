@@ -51,7 +51,7 @@ Vue.component('global-script-font-family', {
 // 必需將component寫在vue instance裡面。(scene.js)
 var scriptFontFamily = {
     template: `
-        <select class="script-control" id="script-control" v-model="localFontFamily" @change=changeFontFamily()>
+        <select class="script-font-family" id="script-font-family" v-model="localFontFamily" @change=changeFontFamily($event)>
             <optgroup v-for="fontType in Object.keys(fonts)" :label="fontType">
                 <option v-for="font in fonts[fontType]" :value="font">{{font}}</option>
             </optgroup>
@@ -59,7 +59,7 @@ var scriptFontFamily = {
     `,
     data: function() {
         return {
-            localFontFamily: 'Garamond',
+            localFontFamily: 'Times New Roman',
             fonts: {
                 'serif': [
                     'Garamond',
@@ -79,6 +79,7 @@ var scriptFontFamily = {
                     'Trebuchet MS',
                     'Helvetica',
                     'Verdana',
+                    'Microsoft JhengHei'
                 ],
                 'monospace': [
                     'Courier',
@@ -88,8 +89,9 @@ var scriptFontFamily = {
         }
     },
     methods: {
-        changeFontFamily: function(){
-            this.$emit('pass-font-family', this.localFontFamily);
+        changeFontFamily: function(event){
+            // console.log(event)
+            this.$emit('pass-font-family', event, this.localFontFamily);
         }
     },
     filters: {},

@@ -1,14 +1,19 @@
 // Local Registration
 var scriptContent = {
-    props: {
-        'fontFamily': String,
-    },
+    props: ['fontFamily', 'fontSize'],
     template: `
-         <textarea class="script-content" v-bind:style="dymanicStyle" v-model="contents"></textarea>
+         <textarea class="script-content" v-bind:style="dymanicStyle" v-model="contents" autofocus></textarea>
     `,
     data: function() {
         return {
-            contents: "tagName：元件的tag名稱，可以在HTML中被拿來當標籤使用，所以須保有唯一性，不能與其他全域元件的名稱重複。 \noptions：選擇性參數，可將前面所學到的options屬性(data、methods、filters、computed、watch)放進去使用，注意data只能是function型態，如果沒有使用function，Vue將會停止執行。",
+            contents: `A winter storm pummeled the Hawaiian islands early Monday, bringing gusty winds, squally rain, high surf and even snow at a state park.
+
+Strong winds knocked down trees and branches on roadways and structures and tore down traffic lights and power lines, causing power outages.
+The winds could potentially damage roofs and poorly built structures, forecasters say. The powerful winds and a high surf closed some roads and parks.
+Hiro Toiya, director of the Honolulu Department of Emergency Management, urged "extra caution driving."
+"Conditions are windy and we do have trees and utility poles and other objects falling onto the street," he said
+Hawaii Electric Light said that "due to unsafe weather conditions, crews will resume work when safe to do so. Mahalo for your patience."
+`,
         }
     },
     methods: {},
@@ -17,6 +22,7 @@ var scriptContent = {
         dymanicStyle: function () {
             return {
                 fontFamily: this.fontFamily,
+                fontSize: this.fontSize +'px',
             }
         }
     },
