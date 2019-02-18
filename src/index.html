@@ -3,38 +3,40 @@
 <head>
     <title>Remote Teleprompter</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+
+
     <script type="text/javascript" src="https://unpkg.com/vue@2.5.21/dist/vue.js"></script>
     <script type="text/javascript" src="./js/teleprompter.js" defer></script>
     <script type="text/javascript" src="./js/script-content.js" defer></script>
     <script type="text/javascript" src="./js/script-control-font-family.js" defer></script>
-    <script type="text/javascript" src="./js/script-control-font-size.js" defer></script>
     <script type="text/javascript" src="./js/script-control-font.js" defer></script>
     <script type="text/javascript" src="./js/script-control-scroll.js" defer></script>
     <script type="text/javascript" src="./js/scene.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="./css/main.css">
 </head>
 <body>
     <div class="scene" id="scene">
         <script-content :font-family="sceneFontFamily" 
                         :font-size="sceneFontSize"
+                        :is-mobile="isMobile"
                         @pass-scroll-to="changeScrollTo"
                         >
         </script-content>
 
         <!-- <global-script-font-family></global-script-font-family> -->
-        <script-font-family @pass-font-family="changeFontFamily">
-        </script-font-family>
-
-        <script-font-size @pass-font-size="changeFontSize">
-        </script-font-size>
-
-        <script-control-font @pass-letter-spacing="changeLetterSpacing"
+        <script-control-font v-if="!isMobile"
+                             @pass-letter-spacing="changeLetterSpacing"
                              @pass-word-spacing="changeWordSpacing"
+                             @pass-font-family="changeFontFamily"
                              @pass-font-color="changeFontColor"
                              @pass-font-size="changeFontSize"
                              @pass-bd-color="changeBgColor"
                              >
         </script-control-font>
-        <script-control-scroll @pass-scrolling-speed="changeScrollingSpeed"
+        <script-control-scroll v-if="!isMobile"
+                               pass-scrolling-speed="changeScrollingSpeed"
                                >
         </script-control-scroll>
 

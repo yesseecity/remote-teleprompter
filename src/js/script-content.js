@@ -1,8 +1,14 @@
 // Local Registration
 var scriptContent = {
-    props: ['fontFamily', 'fontSize'],
+    props: ['fontFamily', 'fontSize', 'isMobile'],
     template: `
-         <textarea class="script-content" v-bind:style="dymanicStyle" v-model="contents" autofocus></textarea>
+         <textarea class="script-content" 
+         v-bind:style="dymanicStyle" 
+         v-bind:class="dymainicClass" 
+         v-bind:readonly="isMobile"
+         v-on:click='doubletap'
+         v-model="contents" 
+         ></textarea>
     `,
     data: function() {
         return {
@@ -14,15 +20,67 @@ Hiro Toiya, director of the Honolulu Department of Emergency Management, urged "
 "Conditions are windy and we do have trees and utility poles and other objects falling onto the street," he said
 Hawaii Electric Light said that "due to unsafe weather conditions, crews will resume work when safe to do so. Mahalo for your patience."
 `,
+            mylatesttap: 0,
+            inFullScreen: false,
         }
     },
-    methods: {},
+    methods: {
+        doubletap: function() {
+            var now = new Date().getTime();
+            var timesince = now - this.mylatesttap;
+            if((timesince < 600) && (timesince > 0)){
+                // double tap  
+                if (this.isMobile) {
+                    if (this.inFullScreen) {
+                        this.exitFullScreen();
+                    } else {
+                        this.toFullScreen();
+                    }
+                }
+            }else{
+                    // too much time to be a doubletap
+            }
+            this.mylatesttap = new Date().getTime();
+        },
+        reflex: function() {
+            // 'horizontal'
+            // 'vertical'
+            
+        },
+        autoScroll: function () {
+            
+        },
+        scrollTo: function (position) {
+            this.$el.scrollTop = position
+        },
+        toFullScreen: function () {
+            this.$el.requestFullscreen();
+            this.inFullScreen = true;
+        },
+        exitFullScreen: function () {
+            if (document.exitFullscreen) {
+                document.exitFullscreen()
+            } else if (document.cancelFullScreen) {
+                // for FireFox
+                document.cancelFullScreen()
+            }
+            this.inFullScreen = false;
+        },
+    },
     filters: {},
     computed: {
         dymanicStyle: function () {
-            return {
+            let defaultStyle = {
                 fontFamily: this.fontFamily,
                 fontSize: this.fontSize +'px',
+            }
+            return defaultStyle
+        },
+        dymainicClass: function () {
+            if (this.isMobile) {
+                return 'mobile-view'
+            } else {
+                return ''
             }
         }
     },

@@ -7,9 +7,10 @@ var scene = new Vue({
         'script-control-scroll': scriptControlScroll,
     },
     data: {
+        isMobile: false,
         username: 'Tid',
         sceneFontFamily: 'Times New Roman',
-        sceneFontSize: '18',
+        sceneFontSize: '48',
         sceneStyle: {
             fontFamily: 'Times New Roman',
             size: '18px',
@@ -21,6 +22,11 @@ var scene = new Vue({
             speed: 100,
 
         }
+    },
+    created: function(){
+            let searchResult = navigator.userAgent.toLowerCase().search('mobile');
+            this.isMobile = searchResult > -1
+            
     },
     methods: {
         changeFontFamily: function(event, childValue){
