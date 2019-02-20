@@ -17,7 +17,6 @@
     /*background-color: black;*/
     border: 0px;
     transition: transform 0.5s;
-
 }
 .scene textarea:focus{
     outline: 0;

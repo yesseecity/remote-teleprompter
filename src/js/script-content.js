@@ -22,6 +22,7 @@ Hawaii Electric Light said that "due to unsafe weather conditions, crews will re
 `,
             mylatesttap: 0,
             inFullScreen: false,
+            scrollingSpeed: 30,
         }
     },
     methods: {
@@ -48,10 +49,39 @@ Hawaii Electric Light said that "due to unsafe weather conditions, crews will re
             
         },
         autoScroll: function () {
-            
+            scrollDelay = null
+            previousScrollTop = null
+            function pageScroll() {
+                $('.script-content').animate({scrollTop: "+=1px" }, 0, 'linear', function(){ $('.script-content').clearQueue(); });
+
+                clearTimeout(scrollDelay);
+                scrollDelay = setTimeout(pageScroll, this.scrollingSpeed);
+
+                if(previousScrollTop+1 !== parseInt($(".script-content").scrollTop())){
+                    clearTimeout(scrollDelay);
+                }
+
+                previousScrollTop = parseInt($(".script-content").scrollTop())
+                // We're at the bottom of the document, stop
+                if($(".script-content").scrollTop() >= ( ( $(".script-content")[0].scrollHeight - $(window).height() ) - 100 )){
+                  // stop_teleprompter();
+                  clearTimeout(scrollDelay);
+                  // back to top
+                  // setTimeout(function(){
+                  //   $('.script-content').stop().animate({scrollTop: 0}, 500, 'swing', function(){ $('.script-content').clearQueue(); });
+                  // }, 500);
+                }
+            }
+            pageScroll()
+
         },
         scrollTo: function (position) {
-            this.$el.scrollTop = position
+            // this.$el.scrollTop = position
+            this.$el.scrollBy({
+              top: position,
+              behavior: 'smooth'
+            });
+
         },
         toFullScreen: function () {
             this.$el.requestFullscreen();
