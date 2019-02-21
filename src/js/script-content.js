@@ -1,14 +1,16 @@
 // Local Registration
 var scriptContent = {
-    props: ['fontFamily', 'fontSize', 'isMobile'],
+    props: ['fontFamily', 'fontSize', 'isMobile', 'rotateY', 'rotateZ'],
     template: `
-         <textarea class="script-content" 
+        <div class="script-content">
+         <textarea 
          v-bind:style="dymanicStyle" 
          v-bind:class="dymainicClass" 
          v-bind:readonly="isMobile"
          v-on:click='doubletap'
          v-model="contents" 
          ></textarea>
+        </div>
     `,
     data: function() {
         return {
@@ -42,11 +44,6 @@ Hawaii Electric Light said that "due to unsafe weather conditions, crews will re
                     // too much time to be a doubletap
             }
             this.mylatesttap = new Date().getTime();
-        },
-        reflex: function() {
-            // 'horizontal'
-            // 'vertical'
-            
         },
         autoScroll: function () {
             scrollDelay = null
@@ -103,6 +100,7 @@ Hawaii Electric Light said that "due to unsafe weather conditions, crews will re
             let defaultStyle = {
                 fontFamily: this.fontFamily,
                 fontSize: this.fontSize +'px',
+                transform: this.transform,
             }
             return defaultStyle
         },
@@ -112,7 +110,10 @@ Hawaii Electric Light said that "due to unsafe weather conditions, crews will re
             } else {
                 return ''
             }
-        }
+        },
+        transform: function () {
+            return 'rotateY('+this.rotateY+'deg) rotateZ('+this.rotateZ+'deg) ' 
+        },
     },
     watch: {},
 }

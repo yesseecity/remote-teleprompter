@@ -31,20 +31,3 @@
     height: 100%;
 }
 
-.flipx {
-    /*-moz-transform: scaleX(-1);*/
-    /*transform: scaleX(-1);*/
-
-    transform: rotateY(180deg);
-}
-
-.flipy {
-    /*-moz-transform:scaleY(-1);*/
-    /*transform: scaleY(-1);*/
-    transform: rotateX(180deg);
-}
-
-
-.flipz {
-    transform: rotateZ(180deg);
-}

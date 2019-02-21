@@ -11,6 +11,8 @@ var scene = new Vue({
         username: 'Tid',
         sceneFontFamily: 'Times New Roman',
         sceneFontSize: '48',
+        rotateY: 0,
+        rotateZ: 0,
         sceneStyle: {
             fontFamily: 'Times New Roman',
             size: '18px',
@@ -52,6 +54,20 @@ var scene = new Vue({
         },
         changeScrollingSpeed: function(event, childValue){
             this.sceneScrollInfo.speed = parseInt(childValue);
+        },
+        flipY: function () {
+            if (this.rotateY == 180) {
+                this.rotateY = 0
+            }else {
+                this.rotateY = 180
+            }
+        },
+        flipZ: function () {
+            if (this.rotateZ == 180) {
+                this.rotateZ = 0
+            }else {
+                this.rotateZ = 180
+            }
         },
     },
     filters: {},
