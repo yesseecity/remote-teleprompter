@@ -23,7 +23,8 @@ var scene = new Vue({
             scrollTo: 0,
             speed: 100,
 
-        }
+        },
+        socket: null,
     },
     created: function(){
             let searchResult = navigator.userAgent.toLowerCase().search('mobile');
@@ -38,33 +39,46 @@ var scene = new Vue({
     methods: {
         createRoom: function (event) {
             console.log('create room')  
-            teleprompter_cli = new Teleprompter()
-            console.log(teleprompter_cli)
+            let teleprompter_cli = new Teleprompter()
             teleprompter_cli.connect(this.deviceType)
+            this.socket = teleprompter_cli.socket
+        },
+        socketSend: function (data) {
+            if (!this.isMobile) {
+                this.socket.send(JSON.stringify(data))
+            }
         },
         changeFontFamily: function(event, childValue){
             this.sceneFontFamily = childValue;
+            this.socketSend({msg: 'fontFamily', value: childValue});
         },
         changeFontSize: function(event, childValue){
             this.sceneFontSize = childValue;
+            this.socketSend({msg: 'fontSize', value: childValue});
         },
         changeLetterSpacing: function(event, childValue){
-            this.sceneFontSize = childValue;
+            this.sceneLetterSpacing = childValue;
+            this.socketSend({msg: 'letterSpacing', value: childValue});
         },
         changeWordSpacing: function(event, childValue){
-            this.sceneFontSize = childValue;
+            this.sceneWordSpacing = childValue;
+            this.socketSend({msg: 'wordSpacing', value: childValue});
         },
         changeFontColor: function(event, childValue){
-            this.sceneFontSize = childValue;
+            this.sceneFontColor = childValue;
+            this.socketSend({msg: 'fontColor', value: childValue});
         },
         changeBgColor: function(event, childValue){
-            this.sceneFontSize = childValue;
+            this.sceneBgColor = childValue;
+            this.socketSend({msg: 'bgColor', value: childValue});
         },
         changeScrollTo: function(event, childValue){
             this.sceneScrollInfo.scrollTo = praseInt(childValue);
+            this.socketSend({msg: 'scrollTo', value: childValue});
         },
         changeScrollingSpeed: function(event, childValue){
             this.sceneScrollInfo.speed = parseInt(childValue);
+            this.socketSend({msg: 'scrollingSpeed', value: childValue});
         },
         flipY: function () {
             if (this.rotateY == 180) {

@@ -22,14 +22,16 @@ function Teleprompter () {
 
 Teleprompter.prototype.connect = function(deviceType) {
     var url = "ws://" + document.URL.substr(7).split('/')[0];
+    var url = "ws://" + '127.0.0.1:8080';
     
     var wsCtor = window['MozWebSocket'] ? MozWebSocket : WebSocket;
     this.socket = new wsCtor(url, 'remote-teleprompter');
 
     this.socket.onmessage = this.websocketOnMessage.bind(this);
     this.socket.onclose = this.websocketOnClose.bind(this);
-
-    this.socket.send(JSON.stringify({ msg: 'createRoom', deviceType: }));
+    // setTimeout(function() {
+    //     this.socket.send(JSON.stringify({ msg: 'createRoom', deviceType: 'mobile'}));
+    // }, 1000);
 };
 
 Teleprompter.prototype.websocketOnMessage = function(message) {

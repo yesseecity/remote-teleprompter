@@ -1,26 +1,16 @@
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var express = require('express');
+var app = require('./web-server/express-server');
 
-// var app = express();
-// app.use(express.static(__dirname + "/src"));
-// app.get('/', function(req, res) {
-//     console.log('get /')
-//     res.render('index', { layout: false });
-// });
-// app.listen(8080);
+web = http.createServer().listen(8080, ()=>{
+    console.log('web socker server started!')
+});
 
-
-h1 = http.createServer(function (req, res) {
-  // server code
-  console.log(`${req.method} ${req.url}`);
-  res.end('hello world!');
-}).listen(8080);
-
+web.on('request', app)
 
 var wsServer = new WebSocketServer({
-    // httpServer: app,
-    httpServer: h1,
+    httpServer: web,
     fragmentOutgoingMessages: false
 });
 
@@ -29,7 +19,7 @@ var connections = [];
 
 
 wsServer.on('request', function(request) {
-    console.log(request)
+    // console.log(request)
     var connection = request.accept('remote-teleprompter', request.origin);
     connections.push(connection);
 
@@ -59,12 +49,13 @@ wsServer.on('request', function(request) {
             try {
                 var command = JSON.parse(message.utf8Data);
 
-                if (command.msg === 'clear') {
-                    canvasCommands = [];
-                }
-                else {
-                    canvasCommands.push(command);
-                }
+                // if (command.msg === 'clear') {
+                //     // canvasCommands = [];
+                // }
+                // else {
+                //     // canvasCommands.push(command);
+                // }
+                console.log('command: ', command)
 
                 // rebroadcast command to all clients
                 connections.forEach(function(destination) {
