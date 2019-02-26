@@ -8,7 +8,7 @@ var scene = new Vue({
     },
     data: {
         isMobile: false,
-        username: 'Tid',
+        deviceType: 'host',
         sceneFontFamily: 'Times New Roman',
         sceneFontSize: '48',
         rotateY: 0,
@@ -27,10 +27,21 @@ var scene = new Vue({
     },
     created: function(){
             let searchResult = navigator.userAgent.toLowerCase().search('mobile');
-            this.isMobile = searchResult > -1
+            this.isMobile = searchResult > -1;
+            if (!this.isMobile) {
+                this.deviceType = 'host';
+            } else {
+                this.deviceType = 'client';
+            }
             
     },
     methods: {
+        createRoom: function (event) {
+            console.log('create room')  
+            teleprompter_cli = new Teleprompter()
+            console.log(teleprompter_cli)
+            teleprompter_cli.connect(this.deviceType)
+        },
         changeFontFamily: function(event, childValue){
             this.sceneFontFamily = childValue;
         },

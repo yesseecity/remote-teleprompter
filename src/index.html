@@ -6,6 +6,8 @@
 
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-status-bar-style" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
 
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.0/TweenLite.min.js"></script> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.0/plugins/ScrollToPlugin.min.js"></script> -->
@@ -47,6 +49,7 @@
                                pass-scrolling-speed="changeScrollingSpeed"
                                >
         </script-control-scroll>
+        <button @click="createRoom">Create Room {{deviceType}}</button>
 
     </div>
 
