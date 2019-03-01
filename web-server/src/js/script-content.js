@@ -1,6 +1,6 @@
 // Local Registration
 var scriptContent = {
-    props: ['fontFamily', 'fontSize', 'isMobile', 'rotateY', 'rotateZ'],
+    props: ['fontFamily', 'fontSize', 'isMobile', 'rotateY', 'rotateZ', 'newContent'],
     template: `
         <div class="script-content">
          <textarea 

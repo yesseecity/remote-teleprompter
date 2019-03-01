@@ -34,18 +34,27 @@ Teleprompter.prototype.connect = function(deviceType) {
     // }, 1000);
 };
 
+Teleprompter.prototype.connect2 = function(deviceType) {
+    // Create connection
+    var socket = io({
+        // transports: ['websocket']
+    });
+
+    return socket
+};
+
+
 Teleprompter.prototype.websocketOnMessage = function(message) {
     try {
-        console.log('socket on message')
-        console.log(message.data)
-        var command = JSON.parse(message.data);
+        console.log(message)
+        // var command = JSON.parse(message.data);
     }
     catch(e) { /* do nothing */ }
     
-    if (command) {
-        // this.dispatchCommand(command);
-        console.log(command)
-    }
+    // if (command) {
+    //     // this.dispatchCommand(command);
+    //     console.log(command)
+    // }
 };
 
 Teleprompter.prototype.websocketOnClose = function(data) {

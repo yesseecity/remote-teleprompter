@@ -9,11 +9,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#000000">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.0/TweenLite.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.0/plugins/ScrollToPlugin.min.js"></script> -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
               integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
               crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 
     <script type="text/javascript" src="https://unpkg.com/vue@2.5.21/dist/vue.js"></script>
     <script type="text/javascript" src="./js/teleprompter.js" defer></script>
@@ -31,6 +30,7 @@
                         :is-mobile="isMobile"
                         :rotate-y="rotateY"
                         :rotate-z="rotateZ"
+                        :new-content="sceneContent"
                         @pass-scroll-to="changeScrollTo"
                         >
         </script-content>
@@ -50,6 +50,7 @@
                                >
         </script-control-scroll>
         <button @click="createRoom">Create Room {{deviceType}}</button>
+        <button @click="joinRoom">Join Room {{deviceType}}</button>
 
     </div>
 

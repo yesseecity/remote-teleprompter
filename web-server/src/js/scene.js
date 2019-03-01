@@ -24,7 +24,9 @@ var scene = new Vue({
             speed: 100,
 
         },
+        sceneContent: '',
         socket: null,
+        roomId: null
     },
     created: function(){
             let searchResult = navigator.userAgent.toLowerCase().search('mobile');
@@ -40,17 +42,56 @@ var scene = new Vue({
         createRoom: function (event) {
             console.log('create room')  
             let teleprompter_cli = new Teleprompter()
-            teleprompter_cli.connect(this.deviceType)
-            this.socket = teleprompter_cli.socket
+            this.socket = teleprompter_cli.connect2(this.deviceType)
+
+            this.socket.on('connect', () => {
+                console.log('on connect: ', this.socket.id);
+            });
+
+            this.socket.emit('createRoom', 'host', (data) => {
+                console.log('room id: ', data);
+                this.roomId = data
+            });
+
+            // this.socket.emit('client emit message', 'aaaaa');
+            // this.socket.emit('requset room id', 'aa', (roomId)=>{
+            //     console.log('room id : ', roomId)
+            // });
+
+            this.socket.on('host message', (msg)=>{
+                console.group('host message')
+                console.log(msg)
+                console.groupEnd('host message')
+            });
+        },
+        joinRoom: function (event) {
+            let teleprompter_cli = new Teleprompter()
+            this.socket = teleprompter_cli.connect2(this.deviceType)
+
+            let getParams = window.location.search.split("?")[1].split('&')
+            for (let i = 0; i < getParams.length; i++) {
+                if ("r" == getParams[i].split("=")[0]) {
+                    this.roomId = getParams[i].split("=")[1]
+                    console.log('room id: ', this.roomId)
+                }
+            }
+            this.socket.emit('joinRoom', 'client', this.roomId);
+
+            this.socket.on('host message', (msg)=>{
+                console.group('host message')
+                console.log(msg)
+                console.groupEnd('host message')
+            });
         },
         socketSend: function (data) {
             if (!this.isMobile) {
-                this.socket.send(JSON.stringify(data))
+                // this.socket.send(JSON.stringify(data))
             }
         },
         changeFontFamily: function(event, childValue){
             this.sceneFontFamily = childValue;
-            this.socketSend({msg: 'fontFamily', value: childValue});
+            // this.socketSend({msg: 'fontFamily', value: childValue});
+            this.socket.emit('client emit message', this.roomId, childValue);
         },
         changeFontSize: function(event, childValue){
             this.sceneFontSize = childValue;
