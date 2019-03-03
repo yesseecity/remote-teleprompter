@@ -1,6 +1,6 @@
 // Local Registration
 var scriptContent = {
-    props: ['fontFamily', 'fontSize', 'isMobile', 'rotateY', 'rotateZ', 'newContent'],
+    props: ['fontFamily', 'fontSize', 'isMobile', 'rotateY', 'rotateZ', 'newContent', 'styleInfo'],
     template: `
         <div class="script-content">
          <textarea 
@@ -101,6 +101,10 @@ Hawaii Electric Light said that "due to unsafe weather conditions, crews will re
                 fontFamily: this.fontFamily,
                 fontSize: this.fontSize +'px',
                 transform: this.transform,
+            }
+            if (this.styleInfo['width'] !== undefined) {
+                defaultStyle['width'] = this.styleInfo['width'] + 'px'
+                defaultStyle['height'] = this.styleInfo['height'] + 'px'
             }
             return defaultStyle
         },

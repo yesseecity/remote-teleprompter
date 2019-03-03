@@ -33,30 +33,59 @@ io.on('connection', function(socket){
             });
         }
     });
-    socket.on('joinRoom', (name, roomId) => {
-        if (name == 'client') {
-            console.log(name , ', id: ', socket.id, 'request join room')
-            socket.join(roomId, () => {
+    socket.on('joinRoom', (msg) => {
+        let msgObj = JSON.parse(msg);
+        if (msgObj.deviceType === 'client' && msgObj.roomId.length > 0) {
+            console.log('client,  id: ', socket.id, 'request join room')
+            socket.join(msgObj.roomId, () => {
                 let rooms = Object.keys(socket.rooms);
-                // [ <socket.id>, 'room 237' ]
+
                 console.log(rooms);
                 // broadcast to everyone in the room
-                io.to(roomId).emit('a new user has joined the room');
+                // io.to(msgObj.roomId).emit('a new user has joined the room');
+
+                let roomSockets = io.sockets.adapter.rooms[msgObj.roomId].sockets;
+                for (let id in roomSockets) {
+                    if (id !== socket.id) {
+                        let cmdObj = {
+                            cmd: 'resize',
+                            width: msgObj.width,
+                            height: msgObj.height,
+                        }
+                        io.to(id).emit('client msg', JSON.stringify(cmdObj))
+                    }
+                }
             });
         }
     });
 
-    socket.on('client emit message', function(roomId, msg){
-        console.log('client emit message: ' + msg);
-        let roomSockets = io.sockets.adapter.rooms[roomId].sockets
+    socket.on('client message', function(roomId, msg){
+        console.log('client  message: ' + msg);
+        let roomSockets = io.sockets.adapter.rooms[roomId].sockets;
         for (let id in roomSockets) {
             if (id !== socket.id) {
-                io.to(id).emit('host message', 'hello Client your font family is '+ msg)
+                io.to(id).emit('client msg', 'hello Client your font family is '+ msg)
             }
         }
         
         // Emit message to all sockets in room
-        // io.to(roomId).emit('host message', 'host emit message')
+        // io.to(roomId or socketId ).emit('host message', 'host emit message')
+    });
+
+    socket.on('host message', function(msg){
+        console.log('host message')
+        let msgObj = JSON.parse(msg);
+        let roomId = msgObj.roomid;
+        delete msgObj['roomid']
+        console.log(msgObj)
+        let roomSockets = io.sockets.adapter.rooms[roomId].sockets
+        for (let id in roomSockets) {
+            if (id !== socket.id) {
+                console.log('emit host msg')
+                io.to(id).emit('host msg', JSON.stringify(msgObj))
+                // io.to(id).emit('host msg', 'aaaaa')
+            }
+        }
     });
 
 
