@@ -1,6 +1,6 @@
 // Local Registration
 var scriptContent = {
-    props: ['fontFamily', 'fontSize', 'isMobile', 'rotateY', 'rotateZ', 'newContent', 'styleInfo'],
+    props: ['fontFamily', 'fontSize', 'isMobile', 'rotateY', 'rotateZ', 'newContent', 'contentWidth', 'contentHeight'],
     template: `
         <div class="script-content">
          <textarea 
@@ -26,6 +26,8 @@ Hawaii Electric Light said that "due to unsafe weather conditions, crews will re
             inFullScreen: false,
             scrollingSpeed: 30,
         }
+    },
+    mounted: function () {
     },
     methods: {
         doubletap: function() {
@@ -70,7 +72,6 @@ Hawaii Electric Light said that "due to unsafe weather conditions, crews will re
                 }
             }
             pageScroll()
-
         },
         scrollTo: function (position) {
             // this.$el.scrollTop = position
@@ -78,7 +79,6 @@ Hawaii Electric Light said that "due to unsafe weather conditions, crews will re
               top: position,
               behavior: 'smooth'
             });
-
         },
         toFullScreen: function () {
             this.$el.requestFullscreen();
@@ -102,9 +102,11 @@ Hawaii Electric Light said that "due to unsafe weather conditions, crews will re
                 fontSize: this.fontSize +'px',
                 transform: this.transform,
             }
-            if (this.styleInfo['width'] !== undefined) {
-                defaultStyle['width'] = this.styleInfo['width'] + 'px'
-                defaultStyle['height'] = this.styleInfo['height'] + 'px'
+            if (this.contentWidth !== 0) {
+                defaultStyle['width'] = this.contentWidth + 'px'
+            }
+            if (this.contentHeight !== 0) {
+                defaultStyle['height'] = this.contentHeight + 'px'
             }
             return defaultStyle
         },
@@ -119,7 +121,7 @@ Hawaii Electric Light said that "due to unsafe weather conditions, crews will re
             return 'rotateY('+this.rotateY+'deg) rotateZ('+this.rotateZ+'deg) ' 
         },
     },
-    watch: {},
+    watch: {}
 }
 
 

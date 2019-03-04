@@ -13,12 +13,8 @@ var scene = new Vue({
         sceneFontSize: '48',
         rotateY: 0,
         rotateZ: 0,
-        sceneStyle: {
-            fontFamily: 'Times New Roman',
-            size: '18px',
-            color: 'initial',
-            backgroundColor: 'initial',
-        },
+        sceneContentWidth: 0,
+        sceneContentHeight: 0,
         sceneScrollInfo: {
             scrollTo: 0,
             speed: 100,
@@ -29,15 +25,23 @@ var scene = new Vue({
         roomId: null
     },
     created: function(){
-            let searchResult = navigator.userAgent.toLowerCase().search('mobile');
-            this.isMobile = searchResult > -1;
-            if (!this.isMobile) {
-                this.deviceType = 'host';
-            } else {
-                this.deviceType = 'client';
-                this.joinRoom()
-            }
-            
+        let searchResult = navigator.userAgent.toLowerCase().search('mobile');
+        this.isMobile = searchResult > -1;
+        if (!this.isMobile) {
+            this.deviceType = 'host';
+        } else {
+            this.deviceType = 'client';
+        }
+    },
+    mounted: function () {
+        this.$nextTick(function () {
+            // Code that will run only after the
+            // entire view has been rendered
+            if (this.deviceType == 'client') {
+                window.addEventListener('resize', this.onResize);
+                this.joinRoom();
+            } 
+        });
     },
     methods: {
         createRoom: function (event) {
@@ -67,17 +71,14 @@ var scene = new Vue({
                         break;
                 }
             });
-
-            this.socket.on('host message', (msg)=>{
-                console.group('host message');
-                console.log(msg);
-                console.groupEnd('host message');
-            });
         },
         joinRoom: function (event) {
+            if (window.location.search.split("?").length < 2) {
+                return
+            }
+
             let teleprompter_cli = new Teleprompter()
             this.socket = teleprompter_cli.connect2(this.deviceType)
-
             let getParams = window.location.search.split("?")[1].split('&')
             for (let i = 0; i < getParams.length; i++) {
                 if ("r" == getParams[i].split("=")[0]) {
@@ -92,8 +93,8 @@ var scene = new Vue({
             let deviceInfo = {
                 deviceType: 'client',
                 roomId: this.roomId,
-                height: window.innerHeight,
-                width: window.innerWidth
+                width: window.innerWidth,
+                height: window.innerHeight
             }
             this.socket.emit('joinRoom', JSON.stringify(deviceInfo));
 
@@ -143,14 +144,27 @@ var scene = new Vue({
                 // this.socket.send(JSON.stringify(data))
             }
         },
+        onResize: function (event) {
+            console.clear();
+            // console.log('on window resize')
+            // console.log(event)
+            console.log(window.innerWidth, window.innerHeight)
+
+            let data = {
+                roomid: this.roomId,
+                cmd: 'resize',
+                width: window.innerWidth,
+                height: window.innerHeight
+            };
+            this.socket.emit('client message', JSON.stringify(data));
+        },
         resizeScriptContent: function (contentDomSize) {
             console.log(contentDomSize)
-            this.sceneStyle['width'] = contentDomSize.width;
-            this.sceneStyle['height'] = contentDomSize.height;
+            this.sceneContentWidth = contentDomSize.width;
+            this.sceneContentHeight = contentDomSize.height;
         },
         changeFontFamily: function(event, childValue){
             this.sceneFontFamily = childValue;
-            this.sceneStyle['fontFamily'] = childValue;
             let data = {
                 roomid: this.roomId,
                 cmd: 'fontFamily', 
@@ -160,11 +174,9 @@ var scene = new Vue({
 
             console.log(this.socket)
             // this.socket.emit('host message', JSON.stringify(data));
-            
         },
         changeFontSize: function(event, childValue){
             this.sceneFontSize = childValue;
-            this.sceneStyle['fontSize'] = childValue;
             let data = {
                 roomid: this.roomId,
                 cmd: 'fontSize', 

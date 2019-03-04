@@ -11,6 +11,10 @@
     background: rgb(0, 0, 0);
 }
 
+.script-content {
+    display: inline-block;
+    
+}
 
 .scene textarea {
     /*color: white;*/

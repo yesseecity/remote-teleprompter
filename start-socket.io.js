@@ -59,12 +59,20 @@ io.on('connection', function(socket){
         }
     });
 
-    socket.on('client message', function(roomId, msg){
-        console.log('client  message: ' + msg);
-        let roomSockets = io.sockets.adapter.rooms[roomId].sockets;
+    socket.on('client message', function(msg){
+        console.log('client  message');
+        console.log(msg)
+        let msgObj = JSON.parse(msg);
+        let roomId = msgObj.roomid;
+        let room = io.sockets.adapter.rooms[roomId]
+        delete msgObj['roomid']
+        if (room == undefined) {
+            return
+        }
+        let roomSockets = room.sockets;
         for (let id in roomSockets) {
             if (id !== socket.id) {
-                io.to(id).emit('client msg', 'hello Client your font family is '+ msg)
+                io.to(id).emit('client msg',  JSON.stringify(msgObj))
             }
         }
         
@@ -74,16 +82,18 @@ io.on('connection', function(socket){
 
     socket.on('host message', function(msg){
         console.log('host message')
+        console.log(msg)
         let msgObj = JSON.parse(msg);
         let roomId = msgObj.roomid;
+        let room = io.sockets.adapter.rooms[roomId]
         delete msgObj['roomid']
-        console.log(msgObj)
-        let roomSockets = io.sockets.adapter.rooms[roomId].sockets
+        if (room == undefined) {
+            return
+        }
+        let roomSockets = room.sockets
         for (let id in roomSockets) {
             if (id !== socket.id) {
-                console.log('emit host msg')
                 io.to(id).emit('host msg', JSON.stringify(msgObj))
-                // io.to(id).emit('host msg', 'aaaaa')
             }
         }
     });
