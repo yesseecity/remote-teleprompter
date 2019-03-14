@@ -1,6 +1,15 @@
 // Local Registration
 var scriptContent = {
-    props: ['fontFamily', 'fontSize', 'isMobile', 'rotateY', 'rotateZ', 'sceneContent', 'contentWidth', 'contentHeight'],
+    props: [
+        'fontFamily',
+        'fontSize',
+        'isMobile',
+        'rotateY',
+        'rotateZ',
+        'sceneContent',
+        'contentWidth',
+        'contentHeight'
+    ],
     template: `
         <div class="script-content">
             <textarea 
@@ -19,6 +28,7 @@ var scriptContent = {
                 v-bind:class="dymainicClass"
                 v-on:blur='sendContents'
                 v-model="content" 
+                placeholder="Input your script content"
             >
             </textarea>
 

@@ -8,7 +8,7 @@
     top: 0px;
     margin: 0px;
     padding: 0px;
-    background: rgb(0, 0, 0);
+    /*background: rgb(0, 0, 0);*/
 }
 
 .script-content {
@@ -17,10 +17,11 @@
 }
 
 .scene textarea {
-    /*color: white;*/
-    /*background-color: black;*/
+    color: white;
+    background-color: black;
     border: 0px;
     transition: transform 0.5s;
+    box-sizing: border-box;
 }
 .scene textarea:focus{
     outline: 0;
