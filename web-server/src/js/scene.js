@@ -9,7 +9,7 @@ var scene = new Vue({
     data: {
         isMobile: false,
         deviceType: 'host',
-        sceneFontFamily: 'Times New Roman',
+        sceneFontFamily: 'monospace',
         sceneFontSize: '48',
         rotateY: 0,
         rotateZ: 0,
@@ -18,7 +18,6 @@ var scene = new Vue({
         sceneScrollInfo: {
             scrollTo: 0,
             speed: 100,
-
         },
         sceneContent: '',
         socket: null,
@@ -67,7 +66,7 @@ var scene = new Vue({
                 console.log(msgObj);
                 switch(msgObj.cmd) {
                     case 'resize':
-                        this.resizeScriptContent({width: msgObj['width'], height: msgObj['height']});
+                        this.resizeScriptContent({width: msgObj['width']-60, height: msgObj['height']});
                         break;
                 }
             });
@@ -106,6 +105,7 @@ var scene = new Vue({
                 switch(msgObj.cmd) {
                     case 'updateContent':
                         this.sceneContent = msgObj['value'];
+                        break;
                     case 'fontFamily':
                         this.sceneFontFamily = msgObj['value'];
                         break;
@@ -130,10 +130,10 @@ var scene = new Vue({
                     case 'scrollingSpeed':
                         this.sceneScrollInfo.speed  = msgObj['value'];
                         break;
-                    case 'flipY':
+                    case 'rotateY':
                         this.rotateY = msgObj['value'];
                         break;
-                    case 'flipZ':
+                    case 'rotateZ':
                         this.rotateZ = msgObj['value'];
                         break;
                 } 
@@ -195,6 +195,7 @@ var scene = new Vue({
             }
             this.socket.emit('host message', JSON.stringify(data));
         },
+
         changeLetterSpacing: function (event, childValue){
             this.sceneLetterSpacing = childValue;
             let data = {
@@ -250,7 +251,7 @@ var scene = new Vue({
             };
             this.socket.emit('host message', JSON.stringify(data));
         },
-        flipY: function (degree) {
+        flipY: function (event, degree) {
             if (degree !== undefined) {
                 this.rotateY = degree  
             } else {
@@ -260,8 +261,14 @@ var scene = new Vue({
                     this.rotateY = 180;
                 }
             }
+            let data = {
+                roomid: this.roomId,
+                cmd: 'rotateY', 
+                value: this.rotateY
+            };
+            this.socket.emit('host message', JSON.stringify(data));
         },
-        flipZ: function (degree) {
+        flipZ: function (event, degree) {
             if (degree !== undefined) {
                 this.rotateZ = degree;
             } else {
@@ -271,6 +278,12 @@ var scene = new Vue({
                     this.rotateZ = 180;
                 }
             }
+            let data = {
+                roomid: this.roomId,
+                cmd: 'rotateZ', 
+                value: this.rotateZ
+            };
+            this.socket.emit('host message', JSON.stringify(data));
         },
     },
     filters: {},

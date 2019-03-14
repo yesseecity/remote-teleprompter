@@ -16,8 +16,8 @@ var scriptControlFont = {
     `,
     data: function() {
         return {
-            localFontSize: 18,
-            localFontFamily: 'Garamond',
+            localFontSize: 48,
+            localFontFamily: 'monospace',
             fonts: {
                 'serif': [
                     'Garamond',
@@ -39,6 +39,7 @@ var scriptControlFont = {
                     'Verdana',
                 ],
                 'monospace': [
+                    'monospace',
                     'Courier',
                     'Courier New'
                 ]

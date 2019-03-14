@@ -58,6 +58,10 @@
                                pass-scrolling-speed="changeScrollingSpeed"
                                >
         </script-control-scroll>
+        <label for="mirror">Mirror</label>
+        <input id="mirror" @change="flipY" type="checkbox">
+        <label for="rotate">Rotate</label>
+        <input id="rotate" @change="flipZ" type="checkbox">
         <button @click="createRoom">Create Room {{deviceType}}</button>
         <button @click="joinRoom">Join Room {{deviceType}}</button>
 
