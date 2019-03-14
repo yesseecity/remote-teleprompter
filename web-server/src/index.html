@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Remote Teleprompter</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-status-bar-style" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+              integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+              crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
+              integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
+              crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+    <script type="text/javascript" src="https://unpkg.com/vue@2.5.21/dist/vue.js"></script>
+    <script type="text/javascript" src="./js/teleprompter.js" defer></script>
+    <script type="text/javascript" src="./js/script-content.js" defer></script>
+    <script type="text/javascript" src="./js/script-control-font-family.js" defer></script>
+    <script type="text/javascript" src="./js/script-control-font.js" defer></script>
+    <script type="text/javascript" src="./js/script-control-scroll.js" defer></script>
+    <script type="text/javascript" src="./js/scene.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="./css/main.css">
+</head>
+<body>
+    <div class="scene" id="scene">
+        <script-content 
+                        :content-width="sceneContentWidth" 
+                        :content-height="sceneContentHeight" 
+                        :font-family="sceneFontFamily" 
+                        :font-size="sceneFontSize"
+                        :is-mobile="isMobile"
+                        :rotate-y="rotateY"
+                        :rotate-z="rotateZ"
+                        :new-content="sceneContent"
+                        @pass-scroll-to="changeScrollTo"
+                        @pass-resize="onResize"
+                        >
+        </script-content>
+
+        <!-- <global-script-font-family></global-script-font-family> -->
+        <script-control-font v-if="!isMobile"
+                             @pass-letter-spacing="changeLetterSpacing"
+                             @pass-word-spacing="changeWordSpacing"
+                             @pass-font-family="changeFontFamily"
+                             @pass-font-color="changeFontColor"
+                             @pass-font-size="changeFontSize"
+                             @pass-bd-color="changeBgColor"
+                             >
+        </script-control-font>
+        <script-control-scroll v-if="!isMobile"
+                               pass-scrolling-speed="changeScrollingSpeed"
+                               >
+        </script-control-scroll>
+        <button @click="createRoom">Create Room {{deviceType}}</button>
+        <button @click="joinRoom">Join Room {{deviceType}}</button>
+
+    </div>
+    <!-- <div class="resize-dom"  style="border: 4px solid white;width: 200px;height: 200px;position: absolute;z-index: 10;"></div> -->
+
+</body>
+</html>
