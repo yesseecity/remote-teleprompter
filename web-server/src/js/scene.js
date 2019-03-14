@@ -104,6 +104,8 @@ var scene = new Vue({
                 let msgObj = JSON.parse(msg);
                 console.log(msgObj);
                 switch(msgObj.cmd) {
+                    case 'updateContent':
+                        this.sceneContent = msgObj['value'];
                     case 'fontFamily':
                         this.sceneFontFamily = msgObj['value'];
                         break;
@@ -144,6 +146,15 @@ var scene = new Vue({
                 // this.socket.send(JSON.stringify(data))
             }
         },
+        updateScriptContent: function (event, childValue) {
+            console.log(childValue)
+            let data = {
+                roomid: this.roomId,
+                cmd: 'updateContent', 
+                value: childValue
+            }
+            this.socket.emit('host message', JSON.stringify(data));
+        },
         onResize: function (event) {
             console.clear();
             // console.log('on window resize')
@@ -163,7 +174,7 @@ var scene = new Vue({
             this.sceneContentWidth = contentDomSize.width;
             this.sceneContentHeight = contentDomSize.height;
         },
-        changeFontFamily: function(event, childValue){
+        changeFontFamily: function (event, childValue){
             this.sceneFontFamily = childValue;
             let data = {
                 roomid: this.roomId,
@@ -175,7 +186,7 @@ var scene = new Vue({
             console.log(this.socket)
             // this.socket.emit('host message', JSON.stringify(data));
         },
-        changeFontSize: function(event, childValue){
+        changeFontSize: function (event, childValue){
             this.sceneFontSize = childValue;
             let data = {
                 roomid: this.roomId,
@@ -184,7 +195,7 @@ var scene = new Vue({
             }
             this.socket.emit('host message', JSON.stringify(data));
         },
-        changeLetterSpacing: function(event, childValue){
+        changeLetterSpacing: function (event, childValue){
             this.sceneLetterSpacing = childValue;
             let data = {
                 roomid: this.roomId,
@@ -194,7 +205,7 @@ var scene = new Vue({
             if (this.disconnected)
             this.socket.emit('host message', JSON.stringify(data));
         },
-        changeWordSpacing: function(event, childValue){
+        changeWordSpacing: function (event, childValue){
             this.sceneWordSpacing = childValue;
             let data = {
                 roomid: this.roomId,
@@ -203,7 +214,7 @@ var scene = new Vue({
             }
             this.socket.emit('host message', JSON.stringify(data));
         },
-        changeFontColor: function(event, childValue){
+        changeFontColor: function (event, childValue){
             this.sceneFontColor = childValue;
             let data = {
                 roomid: this.roomId,
@@ -212,7 +223,7 @@ var scene = new Vue({
             }
             this.socket.emit('host message', JSON.stringify(data));
         },
-        changeBgColor: function(event, childValue){
+        changeBgColor: function (event, childValue){
             this.sceneBgColor = childValue;
             let data = {
                 roomid: this.roomId,
@@ -221,7 +232,7 @@ var scene = new Vue({
             }
             this.socket.emit('host message', JSON.stringify(data));
         },
-        changeScrollTo: function(event, childValue){
+        changeScrollTo: function (event, childValue){
             this.sceneScrollInfo.scrollTo = praseInt(childValue);
             let data = {
                 roomid: this.roomId,
@@ -230,7 +241,7 @@ var scene = new Vue({
             }
             this.socket.emit('host message', JSON.stringify(data));
         },
-        changeScrollingSpeed: function(event, childValue){
+        changeScrollingSpeed: function (event, childValue){
             this.sceneScrollInfo.speed = parseInt(childValue);
             let data = {
                 roomid: this.roomId,

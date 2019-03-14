@@ -1,27 +1,32 @@
 // Local Registration
 var scriptContent = {
-    props: ['fontFamily', 'fontSize', 'isMobile', 'rotateY', 'rotateZ', 'newContent', 'contentWidth', 'contentHeight'],
+    props: ['fontFamily', 'fontSize', 'isMobile', 'rotateY', 'rotateZ', 'sceneContent', 'contentWidth', 'contentHeight'],
     template: `
         <div class="script-content">
-         <textarea 
-         v-bind:style="dymanicStyle" 
-         v-bind:class="dymainicClass" 
-         v-bind:readonly="isMobile"
-         v-on:click='doubletap'
-         v-model="contents" 
-         ></textarea>
+            <textarea 
+                v-if="isMobile"
+                v-bind:style="dymanicStyle" 
+                v-bind:class="dymainicClass" 
+                v-bind:readonly="isMobile"
+                v-on:click='doubletap'
+                v-model="sceneContent" 
+            >
+
+            </textarea>
+            <textarea
+                v-else
+                v-bind:style="dymanicStyle" 
+                v-bind:class="dymainicClass"
+                v-on:blur='sendContents'
+                v-model="content" 
+            >
+            </textarea>
+
         </div>
     `,
     data: function() {
         return {
-            contents: `A winter storm pummeled the Hawaiian islands early Monday, bringing gusty winds, squally rain, high surf and even snow at a state park.
-
-Strong winds knocked down trees and branches on roadways and structures and tore down traffic lights and power lines, causing power outages.
-The winds could potentially damage roofs and poorly built structures, forecasters say. The powerful winds and a high surf closed some roads and parks.
-Hiro Toiya, director of the Honolulu Department of Emergency Management, urged "extra caution driving."
-"Conditions are windy and we do have trees and utility poles and other objects falling onto the street," he said
-Hawaii Electric Light said that "due to unsafe weather conditions, crews will resume work when safe to do so. Mahalo for your patience."
-`,
+            content: '',
             mylatesttap: 0,
             inFullScreen: false,
             scrollingSpeed: 30,
@@ -46,6 +51,9 @@ Hawaii Electric Light said that "due to unsafe weather conditions, crews will re
                     // too much time to be a doubletap
             }
             this.mylatesttap = new Date().getTime();
+        },
+        sendContents: function (event) {
+            this.$emit('pass-script-content', event, this.content);
         },
         autoScroll: function () {
             scrollDelay = null
