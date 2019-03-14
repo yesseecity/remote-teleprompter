@@ -37,9 +37,10 @@
                         :is-mobile="isMobile"
                         :rotate-y="rotateY"
                         :rotate-z="rotateZ"
-                        :new-content="sceneContent"
+                        :scene-content="sceneContent"
                         @pass-scroll-to="changeScrollTo"
                         @pass-resize="onResize"
+                        @pass-script-content="updateScriptContent"
                         >
         </script-content>
 

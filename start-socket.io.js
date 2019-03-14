@@ -21,6 +21,7 @@ io.on('connection', function(socket){
     socket.on('createRoom', (name, fn) => {
         if (name == 'host') {
             let roomId = uniqid.time()
+            roomId = 'jsulk6un';
             fn(roomId)
             console.log(name , ', id: ', socket.id, 'request join room')
             
