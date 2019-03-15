@@ -15,6 +15,8 @@ var scene = new Vue({
         rotateZ: 0,
         sceneContentWidth: 0,
         sceneContentHeight: 0,
+        sceneLetterSpacing: 0,
+        sceneWordSpacing: 0,
         sceneScrollInfo: {
             scrollTo: 0,
             speed: 100,

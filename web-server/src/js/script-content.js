@@ -1,14 +1,16 @@
 // Local Registration
 var scriptContent = {
     props: [
+        'contentWidth',
+        'contentHeight',
+        'contentLetterSpacing',
+        'contentWordSpacing',
         'fontFamily',
         'fontSize',
         'isMobile',
         'rotateY',
         'rotateZ',
         'sceneContent',
-        'contentWidth',
-        'contentHeight'
     ],
     template: `
         <div class="script-content">
@@ -117,8 +119,10 @@ var scriptContent = {
         dymanicStyle: function () {
             let defaultStyle = {
                 fontFamily: this.fontFamily,
-                fontSize: this.fontSize +'px',
+                fontSize: this.fontSize + 'px',
                 transform: this.transform,
+                letterSpacing: this.contentLetterSpacing + 'px',
+                wordSpacing: this.contentWordSpacing + 'px'
             }
             if (this.contentWidth !== 0) {
                 defaultStyle['width'] = this.contentWidth + 'px'

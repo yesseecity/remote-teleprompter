@@ -11,13 +11,33 @@ var scriptControlFont = {
             </select>
             <br>
             <label for="script-control-font-size">Font Size</label>
-            <input id="script-control-font-size" class="script-control-font-size" v-model="localFontSize" @change=changeFontSize($event) type="number">
+            <input id="script-control-font-size" class="font-size" v-model="localFontSize" @change=changeFontSize($event) type="number">
+            <label for="script-control-letter-spacing">Letter spacing</label>
+            <input id="script-control-letter-spacing" 
+                   class="letter-spacing" 
+                   type="number" 
+                   min="0" 
+                   max="10" 
+                   v-model="locaLetterSpacing"
+                   @change=changeLetterSpacing($event)
+                   >
+            <label for="script-control-word-spacing">Word spacing</label>
+            <input id="script-control-word-spacing" 
+                   class="word-spacing" 
+                   type="number" 
+                   min="0" 
+                   max="10" 
+                   v-model="locaWordSpacing"
+                   @change=changeWordSpacing($event)
+                   >
         </div>
     `,
     data: function() {
         return {
             localFontSize: 48,
             localFontFamily: 'monospace',
+            locaLetterSpacing: 0,
+            locaWordSpacing: 0,
             fonts: {
                 'serif': [
                     'Garamond',
@@ -47,6 +67,12 @@ var scriptControlFont = {
         }
     },
     methods: {
+        changeLetterSpacing: function (event) {
+            this.$emit('pass-letter-spacing', event, this.locaLetterSpacing);
+        },
+        changeWordSpacing: function (event) {
+            this.$emit('pass-word-spacing', event, this.locaWordSpacing);
+        },
         changeFontSize: function(event){
             this.$emit('pass-font-size', event, this.localFontSize);
         },
