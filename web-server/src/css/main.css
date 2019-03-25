@@ -13,7 +13,7 @@
 
 .script-content {
     display: inline-block;
-    
+    overflow-y: scroll;
 }
 
 .scene textarea {
@@ -22,6 +22,7 @@
     border: 0px;
     transition: transform 0.5s;
     box-sizing: border-box;
+    resize:none;
 }
 .scene textarea:focus{
     outline: 0;

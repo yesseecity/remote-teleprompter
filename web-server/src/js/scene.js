@@ -21,6 +21,7 @@ var scene = new Vue({
             scrollTo: 0,
             speed: 100,
         },
+        syncScroll: false,
         sceneContent: '',
         socket: null,
         roomId: null
@@ -143,6 +144,10 @@ var scene = new Vue({
                 console.groupEnd('host msg');
             });
         },
+        setSyncScroll: function (event) {
+            console.log('Set syncScroll True')
+            this.syncScroll = true
+        },
         socketSend: function (data) {
             if (!this.isMobile) {
                 // this.socket.send(JSON.stringify(data))
@@ -205,7 +210,6 @@ var scene = new Vue({
                 cmd: 'letterSpacing', 
                 value: childValue
             }
-            if (this.disconnected)
             this.socket.emit('host message', JSON.stringify(data));
         },
         changeWordSpacing: function (event, childValue){
