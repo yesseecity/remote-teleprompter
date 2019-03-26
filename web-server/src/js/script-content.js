@@ -32,6 +32,7 @@ var scriptContent = {
                 v-bind:style="textareaStyle" 
                 v-bind:class="dymainicClass"
                 v-on:blur='sendContents'
+                v-on:keyup='autoGrow'
                 v-model="content" 
                 placeholder="Input your script content"
             >
@@ -54,6 +55,7 @@ BAIRD公司首席投資策略師畢托斯（Bruce Bittles）說：「歐洲和�
         }
     },
     mounted: function () {
+        this.autoGrow()
     },
     methods: {
         doubletap: function() {
@@ -80,17 +82,20 @@ BAIRD公司首席投資策略師畢托斯（Bruce Bittles）說：「歐洲和�
             this.$emit('pass-script-content', event, this.content);
         },
         autoGrow:(event)=>{
-            // textarea = 
-            // var adjustedHeight=textarea.clientHeight;
-            // adjustedHeight=Math.max(textarea.scrollHeight,adjustedHeight);
-            // if (adjustedHeight>textarea.clientHeight){
-            //     textarea.style.height=adjustedHeight+'px';
-            // }
+            var textarea = $('.script-content').find('textarea')[0]
+            var adjustedHeight=textarea.clientHeight;
+            console.log('')
+            console.log('scrollTop:', textarea.scrollTop)
+            console.log('clientHeight:', textarea.clientHeight)
+            adjustedHeight=Math.max(textarea.scrollHeight,adjustedHeight);
+            if (adjustedHeight !=textarea.clientHeight){
+                textarea.style.height=adjustedHeight+'px';
+            }
 
         },
         autoScroll: function () {
-            scrollDelay = null
-            previousScrollTop = null
+            var scrollDelay = null
+            var previousScrollTop = null
             function pageScroll() {
                 scrollTarget = $('.script-content')
                 scrollTarget.animate({scrollTop: "+=1px" }, 0, 'linear', function(){ scrollTarget.clearQueue(); });
@@ -116,8 +121,8 @@ BAIRD公司首席投資策略師畢托斯（Bruce Bittles）說：「歐洲和�
             pageScroll()
         },
         onScroll: function (event) {
-            // console.log('onScroll', event)
-            console.log('scrollTop: ', this.$el.scrollTop)
+            console.log('onScroll')
+            // console.log('scrollTop: ', this.$el.scrollTop)
         },
         scrollTo: function (position) {
             // this.$el.scrollTop = position
