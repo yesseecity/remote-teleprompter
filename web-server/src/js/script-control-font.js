@@ -61,7 +61,15 @@ var scriptControlFont = {
                 'monospace': [
                     'monospace',
                     'Courier',
-                    'Courier New'
+                    'Courier New',
+                    'MS Gothic',
+                    'MS PGothic',
+                    'MS UI Gothic',
+                    'MS Mincho',
+                    'MS PMincho',
+                    'NSimSun',
+                    'SimSun',
+
                 ]
             }
         }
