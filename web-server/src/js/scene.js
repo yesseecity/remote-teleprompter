@@ -13,14 +13,15 @@ var scene = new Vue({
         sceneFontSize: '48',
         rotateY: 0,
         rotateZ: 0,
-        sceneContentWidth: 0,
-        sceneContentHeight: 0,
+        sceneContentWidth: 516,
+        sceneContentHeight: 300,
         sceneLetterSpacing: 0,
         sceneWordSpacing: 0,
         sceneScrollInfo: {
             scrollTo: 0,
             speed: 100,
         },
+        syncScroll: false,
         sceneContent: '',
         socket: null,
         roomId: null
@@ -143,13 +144,17 @@ var scene = new Vue({
                 console.groupEnd('host msg');
             });
         },
+        setSyncScroll: function (event) {
+            console.log('Set syncScroll True')
+            this.syncScroll = true
+        },
         socketSend: function (data) {
             if (!this.isMobile) {
                 // this.socket.send(JSON.stringify(data))
             }
         },
         updateScriptContent: function (event, childValue) {
-            console.log(childValue)
+            if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'updateContent', 
@@ -159,10 +164,8 @@ var scene = new Vue({
         },
         onResize: function (event) {
             console.clear();
-            // console.log('on window resize')
-            // console.log(event)
             console.log(window.innerWidth, window.innerHeight)
-
+            if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'resize',
@@ -178,6 +181,7 @@ var scene = new Vue({
         },
         changeFontFamily: function (event, childValue){
             this.sceneFontFamily = childValue;
+            if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'fontFamily', 
@@ -190,6 +194,7 @@ var scene = new Vue({
         },
         changeFontSize: function (event, childValue){
             this.sceneFontSize = childValue;
+            if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'fontSize', 
@@ -200,16 +205,17 @@ var scene = new Vue({
 
         changeLetterSpacing: function (event, childValue){
             this.sceneLetterSpacing = childValue;
+            if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'letterSpacing', 
                 value: childValue
             }
-            if (this.disconnected)
             this.socket.emit('host message', JSON.stringify(data));
         },
         changeWordSpacing: function (event, childValue){
             this.sceneWordSpacing = childValue;
+            if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'wordSpacing', 
@@ -219,6 +225,7 @@ var scene = new Vue({
         },
         changeFontColor: function (event, childValue){
             this.sceneFontColor = childValue;
+            if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'fontColor', 
@@ -228,6 +235,7 @@ var scene = new Vue({
         },
         changeBgColor: function (event, childValue){
             this.sceneBgColor = childValue;
+            if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'bgColor', 
@@ -237,6 +245,7 @@ var scene = new Vue({
         },
         changeScrollTo: function (event, childValue){
             this.sceneScrollInfo.scrollTo = praseInt(childValue);
+            if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'scrollTo', 
@@ -246,6 +255,7 @@ var scene = new Vue({
         },
         changeScrollingSpeed: function (event, childValue){
             this.sceneScrollInfo.speed = parseInt(childValue);
+            if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'scrollingSpeed', 
@@ -263,6 +273,7 @@ var scene = new Vue({
                     this.rotateY = 180;
                 }
             }
+            if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'rotateY', 
@@ -280,6 +291,7 @@ var scene = new Vue({
                     this.rotateZ = 180;
                 }
             }
+            if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'rotateZ', 

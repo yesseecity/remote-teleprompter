@@ -25,6 +25,7 @@
     <script type="text/javascript" src="./js/script-control-font.js" defer></script>
     <script type="text/javascript" src="./js/script-control-scroll.js" defer></script>
     <script type="text/javascript" src="./js/scene.js" defer></script>
+    <!-- <script type="text/javascript" src="./js/jquery-autogrow.js" defer></script> -->
     <link rel="stylesheet" type="text/css" href="./css/main.css">
 </head>
 <body>
@@ -66,9 +67,8 @@
         <input id="rotate" @change="flipZ" type="checkbox">
         <button @click="createRoom">Create Room {{deviceType}}</button>
         <button @click="joinRoom">Join Room {{deviceType}}</button>
-
+        <button @click="setSyncScroll">Sync Scroll</button>
     </div>
     <!-- <div class="resize-dom"  style="border: 4px solid white;width: 200px;height: 200px;position: absolute;z-index: 10;"></div> -->
-
 </body>
 </html>
