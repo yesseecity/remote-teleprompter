@@ -55,7 +55,7 @@ BAIRD公司首席投資策略師畢托斯（Bruce Bittles）說：「歐洲和�
         }
     },
     mounted: function () {
-        this.autoGrow()
+        // this.autoGrow()
     },
     methods: {
         doubletap: function() {
@@ -81,17 +81,27 @@ BAIRD公司首席投資策略師畢托斯（Bruce Bittles）說：「歐洲和�
             }
             this.$emit('pass-script-content', event, this.content);
         },
-        autoGrow:(event)=>{
-            var textarea = $('.script-content').find('textarea')[0]
-            var adjustedHeight=textarea.clientHeight;
-            console.log('')
-            console.log('scrollTop:', textarea.scrollTop)
-            console.log('clientHeight:', textarea.clientHeight)
-            adjustedHeight=Math.max(textarea.scrollHeight,adjustedHeight);
-            if (adjustedHeight !=textarea.clientHeight){
-                textarea.style.height=adjustedHeight+'px';
-            }
+        autoGrow: function (event) {
+            textarea = event.target
+            cssLineHeight = $(textarea).css('line-height')
 
+            var lineHeight = 0;
+            if (cssLineHeight == 'normal') {
+                fontSize = $(textarea).css('font-size').slice(0,2)
+                lineHeight = parseInt(fontSize*1.46, 10);
+            } else {
+                lineHeight = parseInt(cssLineHeight, 10);
+            }
+            var lines = textarea.value.split('\n');
+            var columns = textarea.cols/2;
+            var lineCount = 0;
+            console.log('columns: ', columns)
+            lines.forEach(function(line) {
+                lineCount += Math.ceil(line.length / columns) || 1;              
+            });
+
+            var height = lineHeight * (lineCount + 1);
+            $(textarea).css('height', height);
         },
         autoScroll: function () {
             var scrollDelay = null

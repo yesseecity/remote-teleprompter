@@ -23,6 +23,7 @@
     transition: transform 0.5s;
     box-sizing: border-box;
     resize:none;
+    overflow-y: hidden;
 }
 .scene textarea:focus{
     outline: 0;
