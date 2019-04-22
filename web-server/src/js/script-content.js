@@ -5,6 +5,9 @@ var scriptContent = {
         'contentHeight',
         'contentLetterSpacing',
         'contentWordSpacing',
+        'contentScrollTo',
+        'contentScrollSpeed',
+        'contentScriptHeight',
         'fontFamily',
         'fontSize',
         'isMobile',
@@ -37,7 +40,6 @@ var scriptContent = {
                 placeholder="Input your script content"
             >
             </textarea>
-
         </div>
     `,
     data: function() {
@@ -131,15 +133,24 @@ BAIRD公司首席投資策略師畢托斯（Bruce Bittles）說：「歐洲和�
             pageScroll()
         },
         onScroll: function (event) {
-            console.log('onScroll')
-            // console.log('scrollTop: ', this.$el.scrollTop)
+            if (!this.isMobile) {
+                console.clear()
+                console.log('onScroll')
+                console.log('scrollTop: ', this.$el.scrollTop)
+                if (this.$el.scrollTop !== undefined) {
+
+                }
+                let scrollTop = this.$el.scrollTop
+                this.$emit('pass-scroll-to', event, scrollTop);
+            }
         },
         scrollTo: function (position) {
             // this.$el.scrollTop = position
-            this.$el.scrollBy({
-              top: position,
-              behavior: 'smooth'
-            });
+            // this.$el.scrollBy({
+            //   top: position,
+            //   behavior: 'smooth'
+            // });
+            this.$el.scrollTop = position;
         },
         toFullScreen: function () {
             this.$el.requestFullscreen();
@@ -179,9 +190,10 @@ BAIRD公司首席投資策略師畢托斯（Bruce Bittles）說：「歐洲和�
             if (this.contentWidth !== 0) {
                 defaultStyle['width'] = this.contentWidth + 'px'
             }
-            // if (this.contentHeight !== 0) {
-            //     defaultStyle['height'] = this.contentHeight + 'px'
-            // }
+            if (this.contentScriptHeight !== 0) {
+                console.log('change content script height ', this.contentScriptHeight )
+                defaultStyle['height'] = this.contentScriptHeight + 'px'
+            }
             return defaultStyle
         },
         dymainicClass: function () {
@@ -195,7 +207,12 @@ BAIRD公司首席投資策略師畢托斯（Bruce Bittles）說：「歐洲和�
             return 'rotateY('+this.rotateY+'deg) rotateZ('+this.rotateZ+'deg) ' 
         },
     },
-    watch: {}
+    watch: {
+        contentScrollTo: function (value) {
+            console.log('watch contentScrollTo  value: ', value)
+            this.scrollTo(value)
+        }
+    }
 }
 
 
