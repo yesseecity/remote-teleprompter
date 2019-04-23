@@ -17,13 +17,13 @@ var scriptContent = {
     ],
     template: `
         <div class="script-content" 
-            v-bind:style="contentStyle" 
+            v-bind:style="contentStyle"
+            v-bind:class="dymainicClass" 
             v-on:scroll='onScroll'
             >
             <textarea 
                 v-if="isMobile"
                 v-bind:style="textareaStyle" 
-                v-bind:class="dymainicClass" 
                 v-bind:readonly="isMobile"
                 v-on:click='doubletap'
                 v-model="sceneContent" 
@@ -105,41 +105,8 @@ BAIRD公司首席投資策略師畢托斯（Bruce Bittles）說：「歐洲和�
             var height = lineHeight * (lineCount + 1);
             $(textarea).css('height', height);
         },
-        autoScroll: function () {
-            var scrollDelay = null
-            var previousScrollTop = null
-            function pageScroll() {
-                scrollTarget = $('.script-content')
-                scrollTarget.animate({scrollTop: "+=1px" }, 0, 'linear', function(){ scrollTarget.clearQueue(); });
-
-                clearTimeout(scrollDelay);
-                scrollDelay = setTimeout(pageScroll, this.scrollingSpeed);
-
-                if(previousScrollTop+1 !== parseInt(scrollTarget.scrollTop())){
-                    clearTimeout(scrollDelay);
-                }
-
-                previousScrollTop = parseInt(scrollTarget.scrollTop())
-                // We're at the bottom of the document, stop
-                if(scrollTarget.scrollTop() >= ( ( scrollTarget[0].scrollHeight - $(window).height() ) - 100 )){
-                  // stop_teleprompter();
-                  clearTimeout(scrollDelay);
-                  // back to top
-                  // setTimeout(function(){
-                  //   $('.script-content').stop().animate({scrollTop: 0}, 500, 'swing', function(){ $('.script-content').clearQueue(); });
-                  // }, 500);
-                }
-            }
-            pageScroll()
-        },
         onScroll: function (event) {
             if (!this.isMobile) {
-                console.clear()
-                console.log('onScroll')
-                console.log('scrollTop: ', this.$el.scrollTop)
-                if (this.$el.scrollTop !== undefined) {
-
-                }
                 let scrollTop = this.$el.scrollTop
                 this.$emit('pass-scroll-to', event, scrollTop);
             }
@@ -170,17 +137,19 @@ BAIRD公司首席投資策略師畢托斯（Bruce Bittles）說：「歐洲和�
     computed: {
         contentStyle: function () {
             let defaultStyle = {}
-
-            if (this.contentWidth !== 0) {
-                defaultStyle['width'] = this.contentWidth + 'px'
-            }
-            if (this.contentHeight !== 0) {
-                defaultStyle['height'] = this.contentHeight + 'px'
-            }
+            console.log(!this.isMobile)
+            if (!this.isMobile) {
+                if (this.contentWidth !== 0) {
+                    defaultStyle['width'] = this.contentWidth + 'px'
+                }
+                if (this.contentHeight !== 0) {
+                    defaultStyle['height'] = this.contentHeight + 'px'
+                }
+            } 
             return defaultStyle
         },
         textareaStyle: function () {
-            let defaultStyle = {
+            let cssStyle = {
                 fontFamily: this.fontFamily,
                 fontSize: this.fontSize + 'px',
                 transform: this.transform,
@@ -188,13 +157,17 @@ BAIRD公司首席投資策略師畢托斯（Bruce Bittles）說：「歐洲和�
                 wordSpacing: this.contentWordSpacing + 'px'
             }
             if (this.contentWidth !== 0) {
-                defaultStyle['width'] = this.contentWidth + 'px'
+                cssStyle['width'] = this.contentWidth + 'px'
             }
-            if (this.contentScriptHeight !== 0) {
-                console.log('change content script height ', this.contentScriptHeight )
-                defaultStyle['height'] = this.contentScriptHeight + 'px'
+            if (this.isMobile && this.contentScriptHeight !== 0) {
+                cssStyle['height'] = this.contentScriptHeight + 'px'
             }
-            return defaultStyle
+            if (!this.isMobile) {
+                cssStyle['min-height'] = this.contentScriptHeight + 'px'
+            } else {
+                cssStyle['min-height'] = window.innerHeight + 'px'
+            }
+            return cssStyle
         },
         dymainicClass: function () {
             if (this.isMobile) {
@@ -209,7 +182,6 @@ BAIRD公司首席投資策略師畢托斯（Bruce Bittles）說：「歐洲和�
     },
     watch: {
         contentScrollTo: function (value) {
-            console.log('watch contentScrollTo  value: ', value)
             this.scrollTo(value)
         }
     }

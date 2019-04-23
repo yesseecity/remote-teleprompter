@@ -101,6 +101,7 @@ var scene = new Vue({
 
 
             this.socket.on('host msg', (msg)=>{
+                console.clear()
                 console.group('host msg');
                 let msgObj = JSON.parse(msg);
                 console.log(msgObj);
@@ -165,8 +166,6 @@ var scene = new Vue({
             this.socket.emit('host message', JSON.stringify(data));
         },
         onResize: function (event) {
-            console.clear();
-            console.log(window.innerWidth, window.innerHeight)
             if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
