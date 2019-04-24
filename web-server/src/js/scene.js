@@ -144,6 +144,9 @@ var scene = new Vue({
                     case 'rotateZ':
                         this.rotateZ = msgObj['value'];
                         break;
+                    case 'clientAutoScroll':
+                        this.$refs.scrollControl.autoScroll()
+                        break;
                 } 
 
                 console.groupEnd('host msg');
@@ -262,7 +265,6 @@ var scene = new Vue({
                 value: $('textarea').innerHeight()
             }
             this.socket.emit('host message', JSON.stringify(textareaData));
-
         },
         changeScrollingSpeed: function (event, childValue){
             this.sceneScrollSpeed = parseInt(childValue);
@@ -271,6 +273,14 @@ var scene = new Vue({
                 roomid: this.roomId,
                 cmd: 'scrollingSpeed', 
                 value: childValue
+            };
+            this.socket.emit('host message', JSON.stringify(data));
+        },
+        clientAutoScroll: function (){
+            if (this.roomId == undefined) return;
+            let data = {
+                roomid: this.roomId,
+                cmd: 'clientAutoScroll'
             };
             this.socket.emit('host message', JSON.stringify(data));
         },
@@ -290,7 +300,7 @@ var scene = new Vue({
                 cmd: 'rotateY', 
                 value: this.rotateY
             };
-            this.socket.emit('host message', JSON.stringify(data));
+            if (this.socket) this.socket.emit('host message', JSON.stringify(data));
         },
         flipZ: function (event, degree) {
             if (degree !== undefined) {
@@ -308,7 +318,7 @@ var scene = new Vue({
                 cmd: 'rotateZ', 
                 value: this.rotateZ
             };
-            this.socket.emit('host message', JSON.stringify(data));
+            if (this.socket) this.socket.emit('host message', JSON.stringify(data));
         },
     },
     filters: {},

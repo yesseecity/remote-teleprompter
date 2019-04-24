@@ -1,12 +1,16 @@
 // Local Registration
 // 必需將component寫在vue instance裡面。(scene.js)
 var scriptControlScroll = {
+    props: [
+        'rotateZ'
+    ],
     template: `
         <div>
             <label>Auto Scrolling Speed</label>
             <input class="script-scroll-speed" v-model="localScrollSpeed" @change=changeScrollSpeed($event) type="number">
             <label>Auto Scroll:</label>
             <button @click="autoScroll">Auto Scroll Start</button>
+            <button @click="clientAutoScroll">Client Auto Scroll</button>
         </div>
     `,
     data: function() {
@@ -21,9 +25,15 @@ var scriptControlScroll = {
         autoScroll: function () {
             var previousScrollTop = 0
             var scrollDelay = null
+            var rotateZ = this.rotateZ
             function pageScroll() {
                 let scrollTarget = $('.script-content')
-                scrollTarget.animate({scrollTop: "+=1px" }, 0, 'linear', function(){ scrollTarget.clearQueue(); });
+                if (rotateZ == 0) {
+                    scrollTarget.animate({scrollTop: "+=1px" }, 0, 'linear', function(){ scrollTarget.clearQueue(); });
+                } else {
+                    scrollTarget.animate({scrollTop: "-=1px" }, 0, 'linear', function(){ scrollTarget.clearQueue(); });
+                }
+
 
                 clearTimeout(scrollDelay);
                 scrollDelay = setTimeout(pageScroll, this.localScrollSpeed);
@@ -34,7 +44,7 @@ var scriptControlScroll = {
                 }
                 previousScrollTop = parseInt(scrollTarget.scrollTop())
 
-                if(scrollTarget.scrollTop() >= ( ( scrollTarget[0].scrollHeight - scrollTarget.height() ) - 100 )){
+                if(scrollTarget.scrollTop() >= ( ( scrollTarget[0].scrollHeight - scrollTarget.height() ))){
                   clearTimeout(scrollDelay);
                   // back to top
                   // setTimeout(function(){
@@ -43,6 +53,9 @@ var scriptControlScroll = {
                 }
             }
             pageScroll()
+        },
+        clientAutoScroll: function (){
+            this.$emit('pass-client-auto-scroll');
         }
     },
     filters: {},

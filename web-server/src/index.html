@@ -61,17 +61,21 @@
                              @pass-bd-color="changeBgColor"
                              >
         </script-control-font>
-        <script-control-scroll v-if="!isMobile"
-                               pass-scrolling-speed="changeScrollingSpeed"
+        <script-control-scroll ref="scrollControl"
+                               :rotate-z="rotateZ"
+                               @pass-scrolling-speed="changeScrollingSpeed"
+                               @pass-client-auto-scroll="clientAutoScroll"
                                >
         </script-control-scroll>
-        <label for="mirror">Mirror</label>
-        <input id="mirror" @change="flipY" type="checkbox">
-        <label for="rotate">Rotate</label>
-        <input id="rotate" @change="flipZ" type="checkbox">
-        <button @click="createRoom">Create Room {{deviceType}}</button>
-        <button @click="joinRoom">Join Room {{deviceType}}</button>
-        <button @click="setSyncScroll">Sync Scroll</button>
+        <div v-if="!isMobile">
+          <label for="mirror">Mirror</label>
+          <input id="mirror" @change="flipY" type="checkbox">
+          <label for="rotate">Rotate</label>
+          <input id="rotate" @change="flipZ" type="checkbox">
+          <button @click="createRoom">Create Room {{deviceType}}</button>
+          <button @click="joinRoom">Join Room {{deviceType}}</button>
+          <button @click="setSyncScroll">Sync Scroll</button>
+        </div>
     </div>
     <!-- <div class="resize-dom"  style="border: 4px solid white;width: 200px;height: 200px;position: absolute;z-index: 10;"></div> -->
 </body>
