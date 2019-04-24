@@ -10,20 +10,20 @@ var scene = new Vue({
         isMobile: false,
         deviceType: 'host',
         sceneFontFamily: 'monospace',
-        sceneFontSize: '48',
+        sceneFontSize: '36',
         rotateY: 0,
         rotateZ: 0,
-        sceneContentWidth: 516,
-        sceneContentHeight: 320,
+        sceneContentWidth: 576,
+        sceneContentHeight: 360,
         sceneLetterSpacing: 0,
         sceneWordSpacing: 0,
         sceneScrollTo: 0,
         sceneScrollSpeed: 100,
-        sceneScriptHeight: 320,
+        sceneScriptHeight: 360,
         syncScroll: false,
         sceneContent: '',
         socket: null,
-        roomId: null
+        roomId: ''
     },
     created: function(){
         let searchResult = navigator.userAgent.toLowerCase().search('mobile');
@@ -68,7 +68,7 @@ var scene = new Vue({
                 console.log(msgObj);
                 switch(msgObj.cmd) {
                     case 'resize':
-                        this.resizeScriptContent({width: msgObj['width']-60, height: msgObj['height']});
+                        this.resizeScriptContent({width: msgObj['width'], height: msgObj['height']});
                         break;
                 }
             });
@@ -97,7 +97,9 @@ var scene = new Vue({
                 width: window.innerWidth,
                 height: window.innerHeight
             }
-            this.socket.emit('joinRoom', JSON.stringify(deviceInfo));
+            if (this.roomId.length > 0) {
+                this.socket.emit('joinRoom', JSON.stringify(deviceInfo));
+            }
 
 
             this.socket.on('host msg', (msg)=>{
@@ -157,7 +159,7 @@ var scene = new Vue({
             }
         },
         updateScriptContent: function (event, childValue) {
-            if (this.roomId == undefined) return;
+            if (this.roomId.length == 0) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'updateContent', 
@@ -244,7 +246,7 @@ var scene = new Vue({
         },
         changeScrollTo: function (event, childValue){
             // TODO comment this for dev
-            // if (!this.syncScroll) return
+            if (!this.syncScroll) return
             this.sceneScrollTo = childValue;
             if (this.roomId == undefined) return;
             let data = {

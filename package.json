@@ -4,6 +4,7 @@
     "author": "Brian McKelvey <brian@worlize.com> (https://www.worlize.com/)",
     "version": "1.0.0",
     "dependencies": {
+        "autosize": "^4.0.2",
         "express": "^4.16.4",
         "socket.io": "^2.2.0",
         "uniqid": "^5.0.3",

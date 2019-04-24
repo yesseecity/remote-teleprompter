@@ -34,7 +34,7 @@ var scriptControlFont = {
     `,
     data: function() {
         return {
-            localFontSize: 48,
+            localFontSize: 36,
             localFontFamily: 'monospace',
             locaLetterSpacing: 0,
             locaWordSpacing: 0,
