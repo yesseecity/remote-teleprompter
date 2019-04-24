@@ -10,21 +10,20 @@ var scene = new Vue({
         isMobile: false,
         deviceType: 'host',
         sceneFontFamily: 'monospace',
-        sceneFontSize: '48',
+        sceneFontSize: '36',
         rotateY: 0,
         rotateZ: 0,
-        sceneContentWidth: 516,
-        sceneContentHeight: 300,
+        sceneContentWidth: 576,
+        sceneContentHeight: 360,
         sceneLetterSpacing: 0,
         sceneWordSpacing: 0,
-        sceneScrollInfo: {
-            scrollTo: 0,
-            speed: 100,
-        },
+        sceneScrollTo: 0,
+        sceneScrollSpeed: 100,
+        sceneScriptHeight: 360,
         syncScroll: false,
         sceneContent: '',
         socket: null,
-        roomId: null
+        roomId: ''
     },
     created: function(){
         let searchResult = navigator.userAgent.toLowerCase().search('mobile');
@@ -69,7 +68,7 @@ var scene = new Vue({
                 console.log(msgObj);
                 switch(msgObj.cmd) {
                     case 'resize':
-                        this.resizeScriptContent({width: msgObj['width']-60, height: msgObj['height']});
+                        this.resizeScriptContent({width: msgObj['width'], height: msgObj['height']});
                         break;
                 }
             });
@@ -98,10 +97,13 @@ var scene = new Vue({
                 width: window.innerWidth,
                 height: window.innerHeight
             }
-            this.socket.emit('joinRoom', JSON.stringify(deviceInfo));
+            if (this.roomId.length > 0) {
+                this.socket.emit('joinRoom', JSON.stringify(deviceInfo));
+            }
 
 
             this.socket.on('host msg', (msg)=>{
+                console.clear()
                 console.group('host msg');
                 let msgObj = JSON.parse(msg);
                 console.log(msgObj);
@@ -127,11 +129,14 @@ var scene = new Vue({
                     case 'bgColor':
                         this.sceneBgColor = msgObj['value'];
                         break;
+                    case 'scriptHeight':
+                        this.sceneScriptHeight = msgObj['value'];
+                        break;
                     case 'scrollTo':
-                        this.sceneScrollInfo.scrollTo  = msgObj['value'];
+                        this.sceneScrollTo  = msgObj['value'];
                         break;
                     case 'scrollingSpeed':
-                        this.sceneScrollInfo.speed  = msgObj['value'];
+                        this.sceneScrollSpeed  = msgObj['value'];
                         break;
                     case 'rotateY':
                         this.rotateY = msgObj['value'];
@@ -145,8 +150,8 @@ var scene = new Vue({
             });
         },
         setSyncScroll: function (event) {
-            console.log('Set syncScroll True')
-            this.syncScroll = true
+            console.log('change syncScroll to : ', !this.syncScroll)
+            this.syncScroll = !this.syncScroll
         },
         socketSend: function (data) {
             if (!this.isMobile) {
@@ -154,7 +159,7 @@ var scene = new Vue({
             }
         },
         updateScriptContent: function (event, childValue) {
-            if (this.roomId == undefined) return;
+            if (this.roomId.length == 0) return;
             let data = {
                 roomid: this.roomId,
                 cmd: 'updateContent', 
@@ -163,8 +168,6 @@ var scene = new Vue({
             this.socket.emit('host message', JSON.stringify(data));
         },
         onResize: function (event) {
-            console.clear();
-            console.log(window.innerWidth, window.innerHeight)
             if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
@@ -172,6 +175,8 @@ var scene = new Vue({
                 width: window.innerWidth,
                 height: window.innerHeight
             };
+            this.sceneContentWidth = window.innerWidth
+            this.sceneContentHeight = window.innerHeight
             this.socket.emit('client message', JSON.stringify(data));
         },
         resizeScriptContent: function (contentDomSize) {
@@ -187,10 +192,7 @@ var scene = new Vue({
                 cmd: 'fontFamily', 
                 value: childValue
             };
-            console.log(JSON.stringify(data))
-
-            console.log(this.socket)
-            // this.socket.emit('host message', JSON.stringify(data));
+            this.socket.emit('host message', JSON.stringify(data));
         },
         changeFontSize: function (event, childValue){
             this.sceneFontSize = childValue;
@@ -202,7 +204,6 @@ var scene = new Vue({
             }
             this.socket.emit('host message', JSON.stringify(data));
         },
-
         changeLetterSpacing: function (event, childValue){
             this.sceneLetterSpacing = childValue;
             if (this.roomId == undefined) return;
@@ -244,7 +245,9 @@ var scene = new Vue({
             this.socket.emit('host message', JSON.stringify(data));
         },
         changeScrollTo: function (event, childValue){
-            this.sceneScrollInfo.scrollTo = praseInt(childValue);
+            // TODO comment this for dev
+            if (!this.syncScroll) return
+            this.sceneScrollTo = childValue;
             if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,
@@ -252,9 +255,17 @@ var scene = new Vue({
                 value: childValue
             }
             this.socket.emit('host message', JSON.stringify(data));
+
+            let textareaData = {
+                roomid: this.roomId,
+                cmd: 'scriptHeight', 
+                value: $('textarea').innerHeight()
+            }
+            this.socket.emit('host message', JSON.stringify(textareaData));
+
         },
         changeScrollingSpeed: function (event, childValue){
-            this.sceneScrollInfo.speed = parseInt(childValue);
+            this.sceneScrollSpeed = parseInt(childValue);
             if (this.roomId == undefined) return;
             let data = {
                 roomid: this.roomId,

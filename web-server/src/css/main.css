@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/earlyaccess/cwtexkai.css);
+
 .scene {
     height: 100%;
     width: 100%;
@@ -14,6 +16,9 @@
 .script-content {
     display: inline-block;
     overflow-y: scroll;
+}
+.script-content::-webkit-scrollbar { 
+    display: none; 
 }
 
 .scene textarea {

@@ -17,6 +17,7 @@
               crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script type="text/javascript" src="./js/autosize.min.js" defer></script>
 
     <script type="text/javascript" src="https://unpkg.com/vue@2.5.21/dist/vue.js"></script>
     <script type="text/javascript" src="./js/teleprompter.js" defer></script>
@@ -35,6 +36,9 @@
                         :content-height="sceneContentHeight" 
                         :content-letter-spacing="sceneLetterSpacing" 
                         :content-word-spacing="sceneWordSpacing" 
+                        :content-scroll-to="sceneScrollTo" 
+                        :content-scroll-speed="sceneScrollSpeed" 
+                        :content-script-height="sceneScriptHeight" 
                         :font-family="sceneFontFamily" 
                         :font-size="sceneFontSize"
                         :is-mobile="isMobile"
