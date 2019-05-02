@@ -71,6 +71,8 @@ data: {
     mounted: function () {
         if (!this.isMobile) {
             autosize($('textarea'));
+        } else {
+            $('textarea').width(window.innerWidth)
         }
     },
     methods: {

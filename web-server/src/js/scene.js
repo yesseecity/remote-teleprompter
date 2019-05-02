@@ -46,9 +46,10 @@ var scene = new Vue({
     },
     methods: {
         createRoom: function (event) {
-            console.log('create room')  
+            console.log('create room')
             let teleprompter_cli = new Teleprompter()
-            this.socket = teleprompter_cli.connect2(this.deviceType)
+            // this.socket = teleprompter_cli.connect2(this.deviceType)
+            this.socket = io({})
 
             this.socket.on('connect', () => {
                 console.log('on connect: ', this.socket.id);
@@ -65,10 +66,16 @@ var scene = new Vue({
             // });
             this.socket.on('client msg', (msg)=>{
                 let msgObj = JSON.parse(msg);
-                console.log(msgObj);
                 switch(msgObj.cmd) {
                     case 'resize':
                         this.resizeScriptContent({width: msgObj['width'], height: msgObj['height']});
+                        break;
+                    case 'requireContent':
+                        let self = this
+                        setTimeout(function() {
+                            self.updateScriptContent(null, self.$refs.scriptContent.content)
+                            self.updateScriptContentHeight()
+                        }, 200);
                         break;
                 }
             });
@@ -89,6 +96,11 @@ var scene = new Vue({
             }
             this.socket.on('connect', () => {
                 console.log('on connect: ', this.socket.id);
+                let data = {
+                    roomid: this.roomId,
+                    cmd: 'requireContent'
+                }
+                this.socket.emit('client message', JSON.stringify(data));
             });
 
             let deviceInfo = {
@@ -103,7 +115,6 @@ var scene = new Vue({
 
 
             this.socket.on('host msg', (msg)=>{
-                console.clear()
                 console.group('host msg');
                 let msgObj = JSON.parse(msg);
                 console.log(msgObj);
@@ -130,7 +141,7 @@ var scene = new Vue({
                         this.sceneBgColor = msgObj['value'];
                         break;
                     case 'scriptHeight':
-                        this.sceneScriptHeight = msgObj['value'];
+                        this.sceneScriptHeight = msgObj['value'] + 70;
                         break;
                     case 'scrollTo':
                         this.sceneScrollTo  = msgObj['value'];
@@ -156,11 +167,6 @@ var scene = new Vue({
             console.log('change syncScroll to : ', !this.syncScroll)
             this.syncScroll = !this.syncScroll
         },
-        socketSend: function (data) {
-            if (!this.isMobile) {
-                // this.socket.send(JSON.stringify(data))
-            }
-        },
         updateScriptContent: function (event, childValue) {
             if (this.roomId.length == 0) return;
             let data = {
@@ -169,6 +175,16 @@ var scene = new Vue({
                 value: childValue
             }
             this.socket.emit('host message', JSON.stringify(data));
+            this.updateScriptContentHeight()
+        },
+        updateScriptContentHeight: function (){
+            if (this.roomId.length == 0) return;
+            let textareaData = {
+                roomid: this.roomId,
+                cmd: 'scriptHeight', 
+                value: $('textarea').innerHeight()
+            }
+            this.socket.emit('host message', JSON.stringify(textareaData));
         },
         onResize: function (event) {
             if (this.roomId == undefined) return;
@@ -183,7 +199,6 @@ var scene = new Vue({
             this.socket.emit('client message', JSON.stringify(data));
         },
         resizeScriptContent: function (contentDomSize) {
-            console.log(contentDomSize)
             this.sceneContentWidth = contentDomSize.width;
             this.sceneContentHeight = contentDomSize.height;
         },
@@ -258,13 +273,6 @@ var scene = new Vue({
                 value: childValue
             }
             this.socket.emit('host message', JSON.stringify(data));
-
-            let textareaData = {
-                roomid: this.roomId,
-                cmd: 'scriptHeight', 
-                value: $('textarea').innerHeight()
-            }
-            this.socket.emit('host message', JSON.stringify(textareaData));
         },
         changeScrollingSpeed: function (event, childValue){
             this.sceneScrollSpeed = parseInt(childValue);
