@@ -21,9 +21,7 @@ io.on('connection', function(socket){
 
     socket.on('createRoom', (info, fn) => {
         if (info.type == 'host') {
-            let roomId = uniqid.time()
-            roomId = 'jsulk6un';
-            
+            const roomId = uniqid.time()
             const url = info.url+'?r='+roomId
             const svgStr = qr.imageSync(url, {type:'svg'});
             
@@ -44,7 +42,7 @@ io.on('connection', function(socket){
         if (msgObj.deviceType === 'client' && msgObj.roomId.length > 0) {
             console.log('client,  id: ', socket.id, 'request join room')
             socket.join(msgObj.roomId, () => {
-                let rooms = Object.keys(socket.rooms);
+                const rooms = Object.keys(socket.rooms);
 
                 console.log(rooms);
                 // broadcast to everyone in the room
