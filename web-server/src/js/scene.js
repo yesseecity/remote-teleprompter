@@ -47,8 +47,6 @@ var scene = new Vue({
     methods: {
         createRoom: function (event) {
             console.log('create room')
-            let teleprompter_cli = new Teleprompter()
-            // this.socket = teleprompter_cli.connect2(this.deviceType)
             this.socket = io({})
 
             this.socket.on('connect', () => {
@@ -60,7 +58,6 @@ var scene = new Vue({
                 this.roomId = data
             });
 
-            // this.socket.emit('client emit message', 'aaaaa');
             // this.socket.emit('requset room id', 'aa', (roomId)=>{
             //     console.log('room id : ', roomId)
             // });
@@ -85,8 +82,7 @@ var scene = new Vue({
                 return
             }
 
-            let teleprompter_cli = new Teleprompter()
-            this.socket = teleprompter_cli.connect2(this.deviceType)
+            this.socket = io({})
             let getParams = window.location.search.split("?")[1].split('&')
             for (let i = 0; i < getParams.length; i++) {
                 if ("r" == getParams[i].split("=")[0]) {
