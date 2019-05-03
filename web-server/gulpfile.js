@@ -33,7 +33,6 @@ const paths = {
       '../node_modules/vue/dist/vue.min.js',
       '../node_modules/socket.io-client/dist/socket.io.slim.js',
       '../node_modules/autosize/dist/autosize.min.js',
-      '../node_modules/qr-image/lib/qr.js',
     ],
     dest: './public/js/'
   },

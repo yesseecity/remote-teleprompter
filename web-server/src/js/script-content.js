@@ -131,7 +131,6 @@ data: {
     computed: {
         contentStyle: function () {
             let defaultStyle = {}
-            console.log(!this.isMobile)
             if (!this.isMobile) {
                 if (this.contentWidth !== 0) {
                     defaultStyle['width'] = this.contentWidth + 'px'
@@ -153,12 +152,15 @@ data: {
             if (this.contentWidth !== 0) {
                 cssStyle['width'] = this.contentWidth + 'px'
             }
-            if (this.isMobile && this.contentScriptHeight !== 0) {
-                cssStyle['height'] = this.contentScriptHeight + 'px'
-            }
             if (!this.isMobile) {
                 cssStyle['min-height'] = this.contentScriptHeight + 'px'
+                setTimeout(function() {
+                    autosize.update($('textarea'))
+                }, 50);
             } else {
+                if (this.contentScriptHeight !== 0) {
+                    cssStyle['height'] = this.contentScriptHeight + 60 + 'px'
+                }
                 cssStyle['min-height'] = window.innerHeight + 'px'
             }
             return cssStyle

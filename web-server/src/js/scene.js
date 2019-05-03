@@ -53,14 +53,17 @@ var scene = new Vue({
                 console.log('on connect: ', this.socket.id);
             });
 
-            this.socket.emit('createRoom', 'host', (data) => {
-                console.log('room id: ', data);
-                this.roomId = data
+            hostInfo = {type:'host', url: document.URL}
+            this.socket.emit('createRoom', hostInfo, (roomId, svgStr) => {
+            // this.socket.emit('createRoom', 'host', (roomId) => {
+                console.log('room id: ', roomId);
+                $('.svg').append(svgStr)
+                $('.client-url>a').attr('url', document.URL+'?r='+roomId)
+                $('.client-url>a').text(document.URL+'?r='+roomId)
+
+                this.roomId = roomId;
             });
 
-            // this.socket.emit('requset room id', 'aa', (roomId)=>{
-            //     console.log('room id : ', roomId)
-            // });
             this.socket.on('client msg', (msg)=>{
                 let msgObj = JSON.parse(msg);
                 switch(msgObj.cmd) {

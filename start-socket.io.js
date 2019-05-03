@@ -2,6 +2,7 @@ const http = require('http');
 const app = require('./web-server/express-server');
 const socketServer = require('socket.io');
 const uniqid = require('uniqid');
+const qr = require('qr-image');
 
 webServer = http.createServer().listen(8080, ()=>{
     console.log('web socker server started!')
@@ -18,17 +19,21 @@ io.on('connection', function(socket){
         console.log('user disconnected');
     });
 
-    socket.on('createRoom', (name, fn) => {
-        if (name == 'host') {
+    socket.on('createRoom', (info, fn) => {
+        if (info.type == 'host') {
             let roomId = uniqid.time()
             roomId = 'jsulk6un';
-            fn(roomId)
-            console.log(name , ', id: ', socket.id, 'request join room')
+            
+            const url = info.url+'?r='+roomId
+            const svgStr = qr.imageSync(url, {type:'svg'});
+            
+            fn(roomId, svgStr)
+            console.log(info.type , ', id: ', socket.id, 'request join room')
             
             socket.join(roomId, () => {
                 let rooms = Object.keys(socket.rooms);
                 // [ <socket.id>, 'room id' ]
-                console.log(rooms);
+                // console.log(rooms);
                 // broadcast to everyone in the room
                 io.to(roomId).emit('a new user has joined the room');
             });
