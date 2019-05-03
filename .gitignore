@@ -60,4 +60,6 @@ typings/
 # next.js build output
 .next
 
+# User define
 package-lock.json
+web-server/temp
